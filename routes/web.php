@@ -14,10 +14,18 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/migrate-db', function () {
+    Artisan::call('migrate --force');
+    return "Database đã được tạo thành công!";
+});
+
+
+require __DIR__ . '/auth.php';
