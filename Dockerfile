@@ -29,6 +29,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Cài đặt Node dependencies và build Vite assets (CSS/JS)
+ENV APP_URL=https://my-laravel-app-zpzk.onrender.com
 RUN npm install && npm run build
 
 # Phân quyền cho Laravel
