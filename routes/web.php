@@ -20,12 +20,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use Illuminate\Support\Facades\Artisan;
-
-Route::get('/migrate-db', function () {
-    Artisan::call('migrate --force');
-    return "Database đã được tạo thành công!";
-});
-
-
 require __DIR__ . '/auth.php';
