@@ -40,7 +40,12 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 
+# Copy và cấp quyền cho entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Mở cổng 80
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+# Chạy entrypoint (tự migrate rồi mới khởi động Apache)
+CMD ["/entrypoint.sh"]
