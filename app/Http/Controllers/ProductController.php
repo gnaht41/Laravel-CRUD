@@ -41,8 +41,15 @@ class ProductController extends Controller
         $data = $request->only(['title', 'date', 'description', 'price']);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images', 'public');
-            $data['image'] = 'storage/' . $path;
+            $image = base64_encode(file_get_contents($request->file('image')->path()));
+            $response = \Illuminate\Support\Facades\Http::asForm()->post('https://api.imgbb.com/1/upload', [
+                'key' => env('IMGBB_API_KEY'),
+                'image' => $image,
+            ]);
+
+            if ($response->successful()) {
+                $data['image'] = $response->json()['data']['url'];
+            }
         }
 
         Product::create($data);
@@ -84,10 +91,15 @@ class ProductController extends Controller
         $data = $request->only(['title', 'date', 'description', 'price']);
 
         if ($request->hasFile('image')) {
-            // Bug fix: only overwrite image when a new file is actually uploaded
-            // otherwise the old image path is preserved
-            $path = $request->file('image')->store('images', 'public');
-            $data['image'] = 'storage/' . $path;
+            $image = base64_encode(file_get_contents($request->file('image')->path()));
+            $response = \Illuminate\Support\Facades\Http::asForm()->post('https://api.imgbb.com/1/upload', [
+                'key' => env('IMGBB_API_KEY'),
+                'image' => $image,
+            ]);
+
+            if ($response->successful()) {
+                $data['image'] = $response->json()['data']['url'];
+            }
         }
 
         $product->update($data);
