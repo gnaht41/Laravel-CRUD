@@ -5,9 +5,11 @@
                 {{ __('Product Details') }}
             </h2>
             <div class="flex space-x-2">
+                @auth
                 <a href="{{ route('products.edit', $product->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow transition duration-200">
                     Edit Product
                 </a>
+                @endauth
                 <a href="{{ route('products.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow transition duration-200">
                     Back to List
                 </a>
