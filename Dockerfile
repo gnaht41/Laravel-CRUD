@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Cài đặt các thư viện hệ thống cần thiết
+# Cài đặt các thư viện hệ thống cần thiết + Node.js
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
-    curl
+    curl \
+    nodejs \
+    npm
 
 # Cài đặt các extension PHP cho Laravel & Postgres
 RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
@@ -25,6 +27,9 @@ COPY . .
 
 # Cài đặt PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
+
+# Cài đặt Node dependencies và build Vite assets (CSS/JS)
+RUN npm install && npm run build
 
 # Phân quyền cho Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache
